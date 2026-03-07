@@ -1,0 +1,6 @@
+[target.wasm32-unknown-unknown]
+# SIMD 가속 옵션과 getrandom 백엔드 옵션을 하나의 배열(Array)로 합쳐서 적용합니다.
+rustflags = [
+    "-C", "target-feature=+simd128", 
+    "--cfg", "getrandom_backend=\"wasm_js\""
+]
