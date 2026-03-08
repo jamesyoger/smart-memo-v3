@@ -9,8 +9,8 @@
     
     
 <script type="module">
-import init, * as bindings from '/llama3_worker-475c75dbf99e0172.js';
-const wasm = await init({ module_or_path: '/llama3_worker-475c75dbf99e0172_bg.wasm' });
+import init, * as bindings from '/llama3_worker-59994be68c64ca58.js';
+const wasm = await init({ module_or_path: '/llama3_worker-59994be68c64ca58_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -19,7 +19,7 @@ window.wasmBindings = bindings;
 dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 </script>
-<link rel="modulepreload" href="/llama3_worker-475c75dbf99e0172.js" crossorigin="anonymous" integrity="sha384-aKfbs5QTMCO3PaoFFo1IO3khB4VxUfLnR5v3erExkSy4MB347Nt91LyOUnVlKOt5"><link rel="modulepreload" href="/snippets/llama3_worker-cdcd73348b1fc649/inline0.js" crossorigin="anonymous" integrity="sha384-seqgU8nLPFCqtf9MgZ3bc+sYD37cOuFyYpyUOwT+u4ErKhHouC0zhq/7bc6wdyfv"><link rel="preload" href="/llama3_worker-475c75dbf99e0172_bg.wasm" crossorigin="anonymous" integrity="sha384-rjSkbqwuwBcAFe4k0uEUcm7c/mk4O3lXyTIIaeE31Bcf41poERapijH4IderzeEL" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="/llama3_worker-59994be68c64ca58.js" crossorigin="anonymous" integrity="sha384-bNjWnDhWUVJaA3LgS6x9qs2mFJKtxeo0dPpKXqYxeLWN86FzS9q8FOOQ2hCBTAKh"><link rel="modulepreload" href="/snippets/llama3_worker-cdcd73348b1fc649/inline0.js" crossorigin="anonymous" integrity="sha384-jGEoFJLNRW1y9Ymqp1le/Q44GY7a0I5tzmnRNjMsosFGVX1Qhl+UEzgjzHm3o5x8"><link rel="preload" href="/llama3_worker-59994be68c64ca58_bg.wasm" crossorigin="anonymous" integrity="sha384-uW32b6TQ/OmIUrNY6uI2awpgvBrcsYR4lPF7BZSvD9nIpBfaCNQV8z5TX8VVd3pg" as="fetch" type="application/wasm"></head>
 <body style="margin: 0; background-color: #f4f4f9;">
     <script>"use strict";
 

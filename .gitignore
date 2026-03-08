@@ -1,1 +1,4 @@
-/target
+/public/model.gguf
+/public/tokenizer.json
+/target/
+/dist/
