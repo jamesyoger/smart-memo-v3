@@ -1,11 +1,11 @@
 [package]
-name = "llama3_worker"
+name = "llama3_worker_ggachi"
 version = "0.1.0"
 edition = "2024"
-default-run = "llama3_worker" # 오타(workder) 주의! 하이픈(-) 대신 언더스코어(_) 사용!
+default-run = "llama3_worker_ggachi" # 오타(workder) 주의! 하이픈(-) 대신 언더스코어(_) 사용!
 
 [[bin]]
-name = "llama3_worker"
+name = "llama3_worker_ggachi"
 path = "src/main.rs"
 
 [dependencies]

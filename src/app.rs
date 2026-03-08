@@ -150,7 +150,9 @@ pub fn worker_main() {
                     
                     let mut all_tokens;
                     let mut next_token_id;
-                    let mut logits_processor = LogitsProcessor::new(1337, Some(0.4), Some(0.9));
+                    
+                    // 💡 [핵심 수정 1] 온도(Temperature)를 0.6으로, Top-P를 0.9로 낮춰서 헛소리(환각)를 방지합니다.
+                    let mut logits_processor = LogitsProcessor::new(1337, Some(0.6), Some(0.9));
 
                     {
                         let mut state_ref = ai_state.borrow_mut();
@@ -205,8 +207,9 @@ pub fn worker_main() {
                                 logits.squeeze(0).unwrap()
                             };
 
+                            // 💡 [핵심 수정 2] 기억 범위는 64로 되돌리고, 반복 페널티는 1.12로 부드럽게 조정하여 한국어 문법을 파괴하지 않게 합니다.
                             let start_at = all_tokens.len().saturating_sub(64);
-                            let penalized_logits = candle_transformers::utils::apply_repeat_penalty(&new_logits, 1.15, &all_tokens[start_at..]).unwrap_or(new_logits);
+                            let penalized_logits = candle_transformers::utils::apply_repeat_penalty(&new_logits, 1.12, &all_tokens[start_at..]).unwrap_or(new_logits);
                             next_token_id = logits_processor.sample(&penalized_logits).unwrap();
                             
                             if next_token_id == 128001 || next_token_id == 128009 { break; }
@@ -365,7 +368,6 @@ pub fn App() -> impl IntoView {
                             </div>
                         </div>
 
-                        // 💡 추가된 Beta/Demo 경고 영역
                         <div style="margin-bottom: 30px; background: #fff8e1; border-left: 4px solid #ffb300; padding: 14px 16px; border-radius: 8px; text-align: left;">
                             <h3 style="font-size: 0.9rem; color: #b28900; margin: 0 0 6px 0; display: flex; align-items: center; gap: 6px;">
                                 "⚠️ Beta Preview (데모 버전)"
@@ -379,11 +381,14 @@ pub fn App() -> impl IntoView {
                             "엔진 로드 및 시작하기"
                         </button>
                         
-                        <p style="font-size: 0.7rem; color: #888; margin-top: 24px; line-height: 1.6;">
-                            "본 애플리케이션은 Meta의 Llama 3.2 모델을 기반으로 작동하며, " <br/>
+                        <div style="font-size: 0.7rem; color: #888; margin-top: 24px; line-height: 1.6;">
+                            "본 애플리케이션은 Meta의 Llama 3.2 모델을 기반으로 작동하며, "
                             <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama3_2/LICENSE" target="_blank" style="color: #666; text-decoration: underline;">"Llama 3.2 Community License Agreement"</a>
-                            "를 엄격히 준수합니다."
-                        </p>
+                            "를 엄격히 준수합니다." <br/>
+                            "한국어 언어 모델 확장은 "
+                            <a href="https://huggingface.co/hyemini/Llama-3.2-Korean-GGACHI-1B-Instruct-v1-Q4_K_M-GGUF" target="_blank" style="color: #666; text-decoration: underline; font-weight: 600;">"hyemini/Llama-3.2-Korean-GGACHI-1B-Instruct"</a>
+                            " 파인튜닝 모델을 사용하고 있습니다."
+                        </div>
                     </div>
                 </Show>
 
@@ -465,7 +470,6 @@ pub fn App() -> impl IntoView {
                     </Show>
                 </div>
                 
-                // 💡 추가된 AI 환각(Hallucination) 및 프라이버시 하단 경고 문구
                 <div style="text-align: center; margin-top: 12px; font-size: 0.75rem; color: #888; line-height: 1.5;">
                     <span style="display: inline-block; margin-bottom: 4px;">"🔒 Privacy First: 귀하의 데이터는 기기 외부로 전송되지 않습니다."</span><br/>
                     <span style="color: #999;">"💡 AI는 부정확하거나 사실과 다른 정보를 생성할 수 있습니다. 중요한 정보는 반드시 교차 검증하시기 바랍니다."</span>
