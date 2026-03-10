@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Llama-3.2 WebGPU Edge AI</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
+    <!-- 🔍 1. 기본 SEO 메타 태그 (구글, 네이버 검색 노출용) -->
+    <title>AI 스마트 메모 적재함 | 100% 온디바이스 로컬 AI 메모장</title>
+    <meta name="description" content="서버 전송 없이 브라우저에서 완벽하게 구동되는 오프라인 AI 마크다운 메모장입니다. 완벽한 프라이버시, 자동 분류, 초고속 실시간 검색을 경험하세요." />
+    <meta name="keywords" content="AI 메모장, 로컬 AI, WebLLM, Llama 3, 마크다운, 프라이버시, 보안 메모, 오프라인 메모, 노트 앱, 개발자 도구" />
+    <meta name="author" content="AI Smart Memo Vault" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- 모바일 브라우저 탭 색상 통일 (앱처럼 보이게 하는 디테일) -->
+    <meta name="theme-color" content="#fafafa" />
+
+    <!-- 🌐 2. Open Graph 태그 (카카오톡, 슬랙, 링크드인 등 링크 공유 시 미리보기 썸네일) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AI 스마트 메모 적재함 - 당신만의 프라이빗 로컬 AI 메모" />
+    <meta property="og:description" content="외부 서버 전송 ZERO. 오직 당신의 기기에서만 작동하는 초고속 AI 마크다운 메모장입니다." />
+    <meta property="og:site_name" content="AI 스마트 메모 적재함" />
+    <meta property="og:locale" content="ko_KR" />
+
+    <!-- 🐦 3. Twitter 카드 태그 (트위터/X 공유 전용) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AI 스마트 메모 적재함 | 100% 로컬 보안 AI" />
+    <meta name="twitter:description" content="외부 서버 전송 ZERO. 오직 당신의 기기에서만 작동하는 초고속 AI 마크다운 메모장입니다." />
+
+    <!-- 🔥 [크리티컬 패치] AI 워커 파일을 배포본(dist)에 복사하라는 Trunk 전용 명령어 (필수!) -->
+    <!-- 참고: 파일이 다른 경로에 있다면 href 속성을 알맞게 수정해 주십시오. (예: href="ai_worker.js") -->
     <link data-trunk rel="copy-file" href="public/ai_worker.js" />
+
+    <!-- 💡 Pro Tip: 나중에 파비콘(브라우저 탭 아이콘) 파일이 생기면 아래 주석을 해제하세요 -->
+    <!-- <link rel="icon" type="image/png" href="/favicon.png" /> -->
+
+    <!-- 
+        [Trunk 빌드 시스템 안내] 
+        Trunk가 빌드(trunk build)를 수행할 때, 이 아래에 자동으로 
+        WebAssembly 로드 스크립트와 CSS 파일 링크를 삽입해 줍니다. 
+    -->
 </head>
-<body>
-    </body>
+<body style="margin: 0; padding: 0; background-color: #fafafa;">
+    <!-- 
+        🕸️ 4. Noscript Fallback (시맨틱 웹)
+        크롤링 봇(Bot)이나, 보안상 자바스크립트를 차단한 사용자가 접속했을 때
+        빈 화면 대신 앱의 정체성을 알려주어 SEO 점수를 높이는 테크닉입니다.
+    -->
+    <noscript>
+        <div style="padding: 40px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333;">
+            <h1 style="font-size: 2rem; color: #111; margin-bottom: 16px;">🧠 AI 스마트 메모 적재함</h1>
+            <p style="font-size: 1.1rem; line-height: 1.6; color: #555;">
+                본 애플리케이션은 클라이언트 사이드 WebAssembly 엔진을 사용합니다.<br/>
+                정상적인 이용을 위해 브라우저 설정에서 <b>JavaScript를 활성화</b>해 주세요.
+            </p>
+            <hr style="margin: 30px auto; border: 0; border-top: 1px solid #ddd; max-width: 300px;" />
+            <h2 style="font-size: 1.2rem; color: #222;">✨ 핵심 기능 안내</h2>
+            <ul style="list-style: none; padding: 0; line-height: 1.8; color: #666;">
+                <li>🔒 서버 전송 없는 <b>100% 로컬 온디바이스 AI</b> 분류</li>
+                <li>⚡ 한글 조합 지연 없는 <b>초고속 실시간 검색</b></li>
+                <li>📝 노션(Notion) 스타일의 <b>스마트 마크다운 에디터</b></li>
+                <li>💾 안전한 브라우저 <b>로컬 스토리지 및 JSON 백업</b> 지원</li>
+            </ul>
+        </div>
+    </noscript>
+
+    <!-- Leptos 앱이 마운트(Mount)되는 진입점입니다 -->
+</body>
 </html>

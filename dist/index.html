@@ -1,14 +1,70 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Llama-3.2 WebGPU Edge AI</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
+    <!-- 🔍 1. 기본 SEO 메타 태그 (구글, 네이버 검색 노출용) -->
+    <title>AI 스마트 메모 적재함 | 100% 온디바이스 로컬 AI 메모장</title>
+    <meta name="description" content="서버 전송 없이 브라우저에서 완벽하게 구동되는 오프라인 AI 마크다운 메모장입니다. 완벽한 프라이버시, 자동 분류, 초고속 실시간 검색을 경험하세요." />
+    <meta name="keywords" content="AI 메모장, 로컬 AI, WebLLM, Llama 3, 마크다운, 프라이버시, 보안 메모, 오프라인 메모, 노트 앱, 개발자 도구" />
+    <meta name="author" content="AI Smart Memo Vault" />
+    <meta name="robots" content="index, follow" />
     
+    <!-- 모바일 브라우저 탭 색상 통일 (앱처럼 보이게 하는 디테일) -->
+    <meta name="theme-color" content="#fafafa" />
+
+    <!-- 🌐 2. Open Graph 태그 (카카오톡, 슬랙, 링크드인 등 링크 공유 시 미리보기 썸네일) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AI 스마트 메모 적재함 - 당신만의 프라이빗 로컬 AI 메모" />
+    <meta property="og:description" content="외부 서버 전송 ZERO. 오직 당신의 기기에서만 작동하는 초고속 AI 마크다운 메모장입니다." />
+    <meta property="og:site_name" content="AI 스마트 메모 적재함" />
+    <meta property="og:locale" content="ko_KR" />
+
+    <!-- 🐦 3. Twitter 카드 태그 (트위터/X 공유 전용) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AI 스마트 메모 적재함 | 100% 로컬 보안 AI" />
+    <meta name="twitter:description" content="외부 서버 전송 ZERO. 오직 당신의 기기에서만 작동하는 초고속 AI 마크다운 메모장입니다." />
+
+    <!-- 🔥 [크리티컬 패치] AI 워커 파일을 배포본(dist)에 복사하라는 Trunk 전용 명령어 (필수!) -->
+    <!-- 참고: 파일이 다른 경로에 있다면 href 속성을 알맞게 수정해 주십시오. (예: href="ai_worker.js") -->
+    
+
+    <!-- 💡 Pro Tip: 나중에 파비콘(브라우저 탭 아이콘) 파일이 생기면 아래 주석을 해제하세요 -->
+    <!-- <link rel="icon" type="image/png" href="/favicon.png" /> -->
+
+    <!-- 
+        [Trunk 빌드 시스템 안내] 
+        Trunk가 빌드(trunk build)를 수행할 때, 이 아래에 자동으로 
+        WebAssembly 로드 스크립트와 CSS 파일 링크를 삽입해 줍니다. 
+    -->
 <link rel="modulepreload" href="/llama31_8b_notepad-f46a6e3b361f536.js" crossorigin="anonymous" integrity="sha384-Jrp6uhZi9W4Iu0oUp2ThJHkOLCzEY0iPCYPGF0JmL/hwGN3NTutoHp/LZ/QnBRdg"><link rel="preload" href="/llama31_8b_notepad-f46a6e3b361f536_bg.wasm" crossorigin="anonymous" integrity="sha384-T09hMYEbKmC7ZWAElk/Rgn8oJwyzOcprEVm1He5XbsxtLQVHSTfaA4bAMzxk2H4F" as="fetch" type="application/wasm"></head>
-<body>
-    
+<body style="margin: 0; padding: 0; background-color: #fafafa;">
+    <!-- 
+        🕸️ 4. Noscript Fallback (시맨틱 웹)
+        크롤링 봇(Bot)이나, 보안상 자바스크립트를 차단한 사용자가 접속했을 때
+        빈 화면 대신 앱의 정체성을 알려주어 SEO 점수를 높이는 테크닉입니다.
+    -->
+    <noscript>
+        <div style="padding: 40px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333;">
+            <h1 style="font-size: 2rem; color: #111; margin-bottom: 16px;">🧠 AI 스마트 메모 적재함</h1>
+            <p style="font-size: 1.1rem; line-height: 1.6; color: #555;">
+                본 애플리케이션은 클라이언트 사이드 WebAssembly 엔진을 사용합니다.<br/>
+                정상적인 이용을 위해 브라우저 설정에서 <b>JavaScript를 활성화</b>해 주세요.
+            </p>
+            <hr style="margin: 30px auto; border: 0; border-top: 1px solid #ddd; max-width: 300px;" />
+            <h2 style="font-size: 1.2rem; color: #222;">✨ 핵심 기능 안내</h2>
+            <ul style="list-style: none; padding: 0; line-height: 1.8; color: #666;">
+                <li>🔒 서버 전송 없는 <b>100% 로컬 온디바이스 AI</b> 분류</li>
+                <li>⚡ 한글 조합 지연 없는 <b>초고속 실시간 검색</b></li>
+                <li>📝 노션(Notion) 스타일의 <b>스마트 마크다운 에디터</b></li>
+                <li>💾 안전한 브라우저 <b>로컬 스토리지 및 JSON 백업</b> 지원</li>
+            </ul>
+        </div>
+    </noscript>
+
+    <!-- Leptos 앱이 마운트(Mount)되는 진입점입니다 -->
+
 <script type="module">
 import init, * as bindings from '/llama31_8b_notepad-f46a6e3b361f536.js';
 const wasm = await init({ module_or_path: '/llama31_8b_notepad-f46a6e3b361f536_bg.wasm' });
@@ -19,134 +75,5 @@ window.wasmBindings = bindings;
 
 dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
-</script><script>"use strict";
-
-(function () {
-
-    const address = '{{__TRUNK_ADDRESS__}}';
-    const base = '{{__TRUNK_WS_BASE__}}';
-    let protocol = '';
-    protocol =
-        protocol
-            ? protocol
-            : window.location.protocol === 'https:'
-                ? 'wss'
-                : 'ws';
-    const url = protocol + '://' + address + base + '.well-known/trunk/ws';
-
-    class Overlay {
-        constructor() {
-            // create an overlay
-            this._overlay = document.createElement("div");
-            const style = this._overlay.style;
-            style.height = "100vh";
-            style.width = "100vw";
-            style.position = "fixed";
-            style.top = "0";
-            style.left = "0";
-            style.backgroundColor = "rgba(222, 222, 222, 0.5)";
-            style.fontFamily = "sans-serif";
-            // not sure that's the right approach
-            style.zIndex = "1000000";
-            style.backdropFilter = "blur(1rem)";
-
-            const container = document.createElement("div");
-            // center it
-            container.style.position = "absolute";
-            container.style.top = "30%";
-            container.style.left = "15%";
-            container.style.maxWidth = "85%";
-
-            this._title = document.createElement("div");
-            this._title.innerText = "Build failure";
-            this._title.style.paddingBottom = "2rem";
-            this._title.style.fontSize = "2.5rem";
-
-            this._message = document.createElement("div");
-            this._message.style.whiteSpace = "pre-wrap";
-
-            const icon= document.createElement("div");
-            icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#dc3545" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>';
-            this._title.prepend(icon);
-
-            container.append(this._title, this._message);
-            this._overlay.append(container);
-
-            this._inject();
-            window.setInterval(() => {
-                this._inject();
-            }, 250);
-        }
-
-        set reason(reason) {
-            this._message.textContent = reason;
-        }
-
-        _inject() {
-            if (!this._overlay.isConnected) {
-                // prepend it
-                document.body?.prepend(this._overlay);
-            }
-        }
-
-    }
-
-    class Client {
-        constructor(url) {
-            this.url = url;
-            this.poll_interval = 5000;
-            this._overlay = null;
-        }
-
-        start() {
-            const ws = new WebSocket(this.url);
-            ws.onmessage = (ev) => {
-                const msg = JSON.parse(ev.data);
-                switch (msg.type) {
-                    case "reload":
-                        this.reload();
-                        break;
-                    case "buildFailure":
-                        this.buildFailure(msg.data)
-                        break;
-                }
-            };
-            ws.onclose = () => this.onclose();
-        }
-
-        onclose() {
-            window.setTimeout(
-                () => {
-                    // when we successfully reconnect, we'll force a
-                    // reload (since we presumably lost connection to
-                    // trunk due to it being killed, so it will have
-                    // rebuilt on restart)
-                    const ws = new WebSocket(this.url);
-                    ws.onopen = () => window.location.reload();
-                    ws.onclose = () => this.onclose();
-                },
-                this.poll_interval);
-        }
-
-        reload() {
-            window.location.reload();
-        }
-
-        buildFailure({reason}) {
-            // also log the console
-            console.error("Build failed:", reason);
-
-            console.debug("Overlay", this._overlay);
-
-            if (!this._overlay) {
-                this._overlay = new Overlay();
-            }
-            this._overlay.reason = reason;
-        }
-    }
-
-    new Client(url).start();
-
-})()
 </script></body>
 </html>
