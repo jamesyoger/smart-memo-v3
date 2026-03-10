@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Llama 3.2 WASM Chatbot</title>
+    <title>Llama-3.2 WebGPU Edge AI</title>
     
     
-    
+<link rel="modulepreload" href="/llama31_8b_notepad-f46a6e3b361f536.js" crossorigin="anonymous" integrity="sha384-Jrp6uhZi9W4Iu0oUp2ThJHkOLCzEY0iPCYPGF0JmL/hwGN3NTutoHp/LZ/QnBRdg"><link rel="preload" href="/llama31_8b_notepad-f46a6e3b361f536_bg.wasm" crossorigin="anonymous" integrity="sha384-T09hMYEbKmC7ZWAElk/Rgn8oJwyzOcprEVm1He5XbsxtLQVHSTfaA4bAMzxk2H4F" as="fetch" type="application/wasm"></head>
+<body>
     
 <script type="module">
-import init, * as bindings from '/llama3_worker_ggachi-209a8a46e5cf5612.js';
-const wasm = await init({ module_or_path: '/llama3_worker_ggachi-209a8a46e5cf5612_bg.wasm' });
+import init, * as bindings from '/llama31_8b_notepad-f46a6e3b361f536.js';
+const wasm = await init({ module_or_path: '/llama31_8b_notepad-f46a6e3b361f536_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -18,10 +19,7 @@ window.wasmBindings = bindings;
 
 dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
-</script>
-<link rel="modulepreload" href="/llama3_worker_ggachi-209a8a46e5cf5612.js" crossorigin="anonymous" integrity="sha384-WcnptfDAXvJDdLUdF3YK0vNt6fm2YEzZSv/YN61Ct+j1Q+C6JYDd1CaWC1qH+JuY"><link rel="modulepreload" href="/snippets/llama3_worker-cdcd73348b1fc649/inline0.js" crossorigin="anonymous" integrity="sha384-jGEoFJLNRW1y9Ymqp1le/Q44GY7a0I5tzmnRNjMsosFGVX1Qhl+UEzgjzHm3o5x8"><link rel="modulepreload" href="/snippets/llama3_worker_ggachi-d3c5e35ea65ef3b4/inline0.js" crossorigin="anonymous" integrity="sha384-jGEoFJLNRW1y9Ymqp1le/Q44GY7a0I5tzmnRNjMsosFGVX1Qhl+UEzgjzHm3o5x8"><link rel="preload" href="/llama3_worker_ggachi-209a8a46e5cf5612_bg.wasm" crossorigin="anonymous" integrity="sha384-uvGZmQfLNVV4+6Yj7xUxWQGIuGpRa1CY8druOD9x9uwUqDOFkhRSmN33BA08UHQz" as="fetch" type="application/wasm"></head>
-<body style="margin: 0; background-color: #f4f4f9;">
-    <script>"use strict";
+</script><script>"use strict";
 
 (function () {
 

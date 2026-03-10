@@ -1,52 +1,49 @@
 [package]
-name = "llama3_worker_ggachi"
+name = "llama31_8b_notepad"
 version = "0.1.0"
 edition = "2024"
-default-run = "llama3_worker_ggachi" # 오타(workder) 주의! 하이픈(-) 대신 언더스코어(_) 사용!
-
-[[bin]]
-name = "llama3_worker_ggachi"
-path = "src/main.rs"
 
 [dependencies]
-# UI 프레임워크
-leptos = { version = "0.8.15", features = ["csr"] }
-console_error_panic_hook = "0.1"
+# 1. UI 프레임워크 (요청하신 0.8.15 최신 버전 적용)
+leptos = { version = "0.8.15", features = ["csr"] } 
 
-# 인공지능 엔진
-candle-core = "0.9.2"
-candle-transformers = "0.9.2"
-tokenizers = { version = "0.21.0", default-features = false, features = ["unstable_wasm"] }
-
-# 유틸리티
-reqwest = { version = "0.11", features = ["json"] }
-gloo-timers = { version = "0.3", features = ["futures"] }
+# 2. 데이터 직렬화/역직렬화 (WebGPU 워커와 초고속 통신용)
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
-# WASM 브릿지 및 비동기 처리
+# 3. 브라우저/JS 통신 브릿지
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
 js-sys = "0.3"
+console_error_panic_hook = "0.1.7"
+pulldown-cmark = "0.13.1"
 
-# 난수 생성기
-getrandom = { version = "0.3", features = ["wasm_js"] }
-
-# 웹 브라우저 API 권한
 [dependencies.web-sys]
 version = "0.3"
 features = [
-    "Window", 
-    "Location", 
-    "console", 
-    "Worker", 
-    "MessageEvent", 
-    "DedicatedWorkerGlobalScope", 
-    "WorkerLocation"
+    "Worker",
+    "WorkerOptions",
+    "WorkerType",  # 🔥 제가 빼라고 했던 녀석을 다시 살려냈습니다! 죄송합니다.
+    "MessageEvent",
+    "HtmlTextAreaElement",
+    "Window",
+    "Document",
+    "HtmlElement",
+    "CssStyleDeclaration",
+    "Storage",
+    "Blob",
+    "BlobPropertyBag",
+    "File",
+    "FileList",
+    "FileReader",
+    "Url",
+    "HtmlAnchorElement",
+    "HtmlInputElement",
 ]
 
+# 🚀 극강의 WebAssembly 용량 최적화 옵션 (Cloudflare 배포 0.1초 컷)
 [profile.release]
-opt-level = 3        # 최고 수준의 속도 최적화
-lto = true           # 링크 타임 최적화 (코드를 하나로 뭉쳐서 속도 극대화)
-codegen-units = 1    # 병렬 빌드를 포기하는 대신 결과물 속도 향상
-panic = "abort"      # 에러 발생 시 추적 코드를 빼서 용량/속도 이득
+opt-level = 'z'       # 크기 최적화 (가장 작게)
+lto = true            # 링크 타임 최적화 (불필요한 코드 완벽 제거)
+codegen-units = 1     # 병렬 빌드를 끄는 대신 최적화 한계 돌파
+panic = "abort"       # 패닉 시 스택 추적 제거 (용량 대폭 감소)
