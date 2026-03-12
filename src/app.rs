@@ -113,7 +113,6 @@ pub fn App() -> impl IntoView {
             <header style="padding: 16px 24px; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-direction: column; gap: 16px; z-index: 10;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        // 🚀 상단 헤더 제목 깔끔하게 변경
                         <h1 style="margin: 0; font-size: 1.2rem; color: #111; font-weight: 800;">"🧠 AI Memo Vault"</h1>
                         
                         <Show when=move || store.app_status.get() == AppStatus::Ready>
@@ -232,7 +231,6 @@ pub fn App() -> impl IntoView {
                     <div style="background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eaeaea; max-width: 700px; margin: 40px auto; animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);">
                         <div style="text-align: center; margin-bottom: 32px;">
                             <span style="font-size: 3rem; display: block; margin-bottom: 16px;">"🧭"</span>
-                            // 🚀 메인 로고 제목도 깔끔하게 변경!
                             <h2 style="margin: 0; color: #111; font-size: 1.8rem; font-weight: 800;">"AI Memo Vault"</h2>
                             <p style="color: #666; font-size: 1rem; margin-top: 12px;">"듀얼 코어 AI를 탑재한 궁극의 로컬 시맨틱 메모장"</p>
                         </div>
@@ -243,7 +241,7 @@ pub fn App() -> impl IntoView {
                             </button>
                         </div>
 
-                        // 🚀 1. 가장 중요한 [안심 고지]를 예쁘게 추가했습니다! (그린 톤 쉴드 디자인)
+                        // 🚀 여기에 기기 연동 불가(오직 이 PC에서만) 안내 문구를 확실하게 추가했습니다!
                         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 20px; text-align: left; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(34, 197, 94, 0.05);">
                             <h4 style="margin: 0 0 8px 0; font-weight: 800; color: #15803d; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;">
                                 "🛡️ 100% 로컬 구동 (서버 전송 무)"
@@ -253,9 +251,11 @@ pub fn App() -> impl IntoView {
                                 <strong style="color: #14532d; background: #dcfce7; padding: 2px 6px; border-radius: 4px; border: 1px solid #bbf7d0;">"단 1바이트도 외부 서버나 클라우드로 전송되지 않으므로"</strong> 
                                 ", 개인적인 금융 내역이나 기밀 업무 내용을 완벽하게 안심하고 작성하셔도 됩니다."
                             </p>
+                            <p style="margin: 12px 0 0 0; line-height: 1.6; color: #166534; font-size: 0.95rem; border-top: 1px dashed #bbf7d0; padding-top: 12px;">
+                                "📌 " <b>"기기 간 연동 불가 안내:"</b> " 클라우드 서버를 사용하지 않기 때문에, " <b>"현재 작업 중인 바로 이 PC(또는 스마트폰)의 브라우저에서만"</b> " 저장된 데이터를 볼 수 있습니다. 다른 기기에서 접속하면 연동되지 않은 빈 화면이 나타납니다."
+                            </p>
                         </div>
 
-                        // 2. 기존 브라우저 저장소 휘발성 경고 및 라이선스 (옐로우/레드 톤)
                         <div style="background: #fff3cd; border: 1px solid #ffe69c; border-radius: 10px; padding: 20px; text-align: left; font-size: 0.9rem; color: #664d03; display: flex; flex-direction: column; gap: 16px;">
                             <div>
                                 <h4 style="margin: 0 0 8px 0; font-weight: 800; color: #b02a37; font-size: 1.05rem;">"🚨 데이터 소실 및 공용 기기 주의사항"</h4>
