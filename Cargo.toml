@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-# 1. UI 프레임워크 (요청하신 0.8.15 최신 버전 적용)
+# 1. UI 프레임워크 
 leptos = { version = "0.8.15", features = ["csr"] } 
 
 # 2. 데이터 직렬화/역직렬화 (WebGPU 워커와 초고속 통신용)
@@ -21,15 +21,27 @@ pulldown-cmark = "0.13.1"
 [dependencies.web-sys]
 version = "0.3"
 features = [
+    # 워커 및 통신 관련
     "Worker",
     "WorkerOptions",
-    "WorkerType",  # 🔥 제가 빼라고 했던 녀석을 다시 살려냈습니다! 죄송합니다.
+    "WorkerType",  
     "MessageEvent",
-    "HtmlTextAreaElement",
+    
+    # DOM 및 UI 조작 관련
     "Window",
     "Document",
     "HtmlElement",
+    "HtmlTextAreaElement",
+    "HtmlAnchorElement",
+    "HtmlInputElement",
     "CssStyleDeclaration",
+    
+    # 이벤트 처리 및 디버깅
+    "Event",
+    "EventTarget",
+    "console",
+    
+    # 스토리지 및 파일 I/O 관련
     "Storage",
     "Blob",
     "BlobPropertyBag",
@@ -37,13 +49,12 @@ features = [
     "FileList",
     "FileReader",
     "Url",
-    "HtmlAnchorElement",
-    "HtmlInputElement",
 ]
 
-# 🚀 극강의 WebAssembly 용량 최적화 옵션 (Cloudflare 배포 0.1초 컷)
+# 🚀 극강의 WebAssembly 용량 최적화 옵션
 [profile.release]
 opt-level = 'z'       # 크기 최적화 (가장 작게)
 lto = true            # 링크 타임 최적화 (불필요한 코드 완벽 제거)
 codegen-units = 1     # 병렬 빌드를 끄는 대신 최적화 한계 돌파
 panic = "abort"       # 패닉 시 스택 추적 제거 (용량 대폭 감소)
+strip = true          # 디버그 심볼 완벽 제거 (극강의 용량 다이어트)
