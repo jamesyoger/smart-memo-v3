@@ -4,50 +4,51 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
-    <!-- 🔍 1. 기본 SEO 메타 태그 (구글, 네이버 검색 노출용) -->
     <title>AI 스마트 메모 적재함 | 100% 온디바이스 로컬 AI 메모장</title>
     <meta name="description" content="서버 전송 없이 브라우저에서 완벽하게 구동되는 오프라인 AI 마크다운 메모장입니다. 완벽한 프라이버시, 자동 분류, 초고속 실시간 검색을 경험하세요." />
     <meta name="keywords" content="AI 메모장, 로컬 AI, WebLLM, Llama 3, 마크다운, 프라이버시, 보안 메모, 오프라인 메모, 노트 앱, 개발자 도구" />
     <meta name="author" content="AI Smart Memo Vault" />
     <meta name="robots" content="index, follow" />
     
-    <!-- 모바일 브라우저 탭 색상 통일 (앱처럼 보이게 하는 디테일) -->
     <meta name="theme-color" content="#fafafa" />
 
-    <!-- 🌐 2. Open Graph 태그 (카카오톡, 슬랙, 링크드인 등 링크 공유 시 미리보기 썸네일) -->
+    <meta name="google-site-verification" content="ekrGIMDAigxlSuHk-Ak5pmJe3frYHv4XZmJWyifbtxE" />
+    <meta name="naver-site-verification" content="907bfb9912217216ace0316e66beff2f9ce7372c" />
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content="AI 스마트 메모 적재함 - 당신만의 프라이빗 로컬 AI 메모" />
     <meta property="og:description" content="외부 서버 전송 ZERO. 오직 당신의 기기에서만 작동하는 초고속 AI 마크다운 메모장입니다." />
     <meta property="og:site_name" content="AI 스마트 메모 적재함" />
     <meta property="og:locale" content="ko_KR" />
 
-    <!-- 🐦 3. Twitter 카드 태그 (트위터/X 공유 전용) -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="AI 스마트 메모 적재함 | 100% 로컬 보안 AI" />
     <meta name="twitter:description" content="외부 서버 전송 ZERO. 오직 당신의 기기에서만 작동하는 초고속 AI 마크다운 메모장입니다." />
 
-    <!-- 🔥 [크리티컬 패치] AI 워커 파일을 배포본(dist)에 복사하라는 Trunk 전용 명령어 (필수!) -->
-    <!-- 참고: 파일이 다른 경로에 있다면 href 속성을 알맞게 수정해 주십시오. (예: href="ai_worker.js") -->
+    
+    
     
 
-    <!-- 💡 Pro Tip: 나중에 파비콘(브라우저 탭 아이콘) 파일이 생기면 아래 주석을 해제하세요 -->
-    <!-- <link rel="icon" type="image/png" href="/favicon.png" /> -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            setTimeout(() => {
+                if(document.getElementById('google_translate_element')) {
+                    new google.translate.TranslateElement({
+                        pageLanguage: 'ko',
+                        // 👉 영어(en)와 한국어(ko)를 모두 사용할 수 있도록 수정
+                        includedLanguages: 'en,ko', 
+                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                        autoDisplay: false
+                    }, 'google_translate_element');
+                }
+            }, 100);
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
 
-    <!-- 
-        [Trunk 빌드 시스템 안내] 
-        Trunk가 빌드(trunk build)를 수행할 때, 이 아래에 자동으로 
-        WebAssembly 로드 스크립트와 CSS 파일 링크를 삽입해 줍니다. 
-    -->
-    <!-- Cloudflare Web Analytics -->
-     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ff3b1a9316c94789a7486a8525107c05"}'>
-     </script><!-- End Cloudflare Web Analytics -->
-<link rel="modulepreload" href="/llama31_8b_notepad-4497653507e1cefd.js" crossorigin="anonymous" integrity="sha384-xsnbkGbG8f0x1NsITtv+h6VdKvliDGkRKBOH1NgYqCgzNVj8sYijafbA1sUULJGe"><link rel="preload" href="/llama31_8b_notepad-4497653507e1cefd_bg.wasm" crossorigin="anonymous" integrity="sha384-Nvhxu5P5xrSmO73A8s6E7u5POZCL2YOJi8LDnC6q9kMk4E5c1M9Zmja7jJXKhlgO" as="fetch" type="application/wasm"></head>
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ff3b1a9316c94789a7486a8525107c05"}'>
+     </script><link rel="modulepreload" href="/llama31_8b_notepad-38b9bab3a6d7c924.js" crossorigin="anonymous" integrity="sha384-LmIKYFjZ3TnbeeMAiXHmGnOl6zcl/cBf5Tji0zvJGAHdHQcGq+wTSOG3FYpKaeTk"><link rel="preload" href="/llama31_8b_notepad-38b9bab3a6d7c924_bg.wasm" crossorigin="anonymous" integrity="sha384-t/DRsuXq15/iG1YwdIpZpGiqrc8KKc2cKYYgtVhroCEhDSiE2VWKVmnQYNhMuSEZ" as="fetch" type="application/wasm"></head>
 <body style="margin: 0; padding: 0; background-color: #fafafa;">
-    <!-- 
-        🕸️ 4. Noscript Fallback (시맨틱 웹)
-        크롤링 봇(Bot)이나, 보안상 자바스크립트를 차단한 사용자가 접속했을 때
-        빈 화면 대신 앱의 정체성을 알려주어 SEO 점수를 높이는 테크닉입니다.
-    -->
     <noscript>
         <div style="padding: 40px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333;">
             <h1 style="font-size: 2rem; color: #111; margin-bottom: 16px;">🧠 AI 스마트 메모 적재함</h1>
@@ -66,11 +67,9 @@
         </div>
     </noscript>
 
-    <!-- Leptos 앱이 마운트(Mount)되는 진입점입니다 -->
-
 <script type="module">
-import init, * as bindings from '/llama31_8b_notepad-4497653507e1cefd.js';
-const wasm = await init({ module_or_path: '/llama31_8b_notepad-4497653507e1cefd_bg.wasm' });
+import init, * as bindings from '/llama31_8b_notepad-38b9bab3a6d7c924.js';
+const wasm = await init({ module_or_path: '/llama31_8b_notepad-38b9bab3a6d7c924_bg.wasm' });
 
 
 window.wasmBindings = bindings;

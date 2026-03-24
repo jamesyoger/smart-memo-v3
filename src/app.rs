@@ -7,6 +7,21 @@ use pulldown_cmark::{Parser, Options, html};
 use crate::store::AppStore;
 use crate::models::{AppStatus, MemoCard};
 
+// 👉 Pro-Level: Cargo.toml 수정 없이 js_sys::Reflect를 활용한 동적 프로퍼티 접근 기법
+fn is_mobile_device() -> bool {
+    if let Some(window) = web_sys::window() {
+        if let Ok(navigator) = js_sys::Reflect::get(&window, &JsValue::from_str("navigator")) {
+            if let Ok(user_agent) = js_sys::Reflect::get(&navigator, &JsValue::from_str("userAgent")) {
+                if let Some(ua) = user_agent.as_string() {
+                    let ua_lower = ua.to_lowercase();
+                    return ua_lower.contains("mobi") || ua_lower.contains("android") || ua_lower.contains("iphone") || ua_lower.contains("ipad");
+                }
+            }
+        }
+    }
+    false
+}
+
 #[component]
 fn HighlightText(text: String, query: ReadSignal<String>) -> impl IntoView {
     let parts = move || {
@@ -106,13 +121,27 @@ pub fn App() -> impl IntoView {
              .markdown-body code { background: #f0f0f0; color: #e01e5a; padding: 3px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; }
              .markdown-body pre code { background: none; color: inherit; padding: 0; }
              .markdown-body blockquote { border-left: 4px solid #007aff; padding-left: 14px; color: #666; margin: 0 0 12px 0; background: #f8f9fa; padding: 8px 14px; border-radius: 0 6px 6px 0; }
-             .markdown-body ul, .markdown-body ol { margin-top: 0; margin-bottom: 12px; padding-left: 24px; }"
+             .markdown-body ul, .markdown-body ol { margin-top: 0; margin-bottom: 12px; padding-left: 24px; }
+             
+             iframe.goog-te-banner-frame { display: none !important; }
+             .skiptranslate > iframe { display: none !important; }
+             body, html { top: 0px !important; position: static !important; }
+             #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+             .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
+             
+             .goog-logo-link { display: none !important; }
+             .goog-te-gadget { color: transparent !important; font-size: 0px; }
+             .goog-te-gadget .goog-te-combo { font-size: 0.85rem; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0; outline: none; background-color: #fff; color: #333; margin: 0; cursor: pointer; font-family: inherit; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); font-weight: 600; transition: all 0.2s ease; }
+             .goog-te-gadget .goog-te-combo:hover { border-color: #cbd5e1; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15); }"
         </style>
         
         <main style="max-width: 900px; margin: 0 auto; height: 100vh; display: flex; flex-direction: column; background: #fafafa; font-family: -apple-system, sans-serif;">
+            
+            <div id="google_translate_element" style="position: fixed; top: 16px; right: 24px; z-index: 9999;"></div>
+
             <header style="padding: 16px 24px; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-direction: column; gap: 16px; z-index: 10;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                         <h1 style="margin: 0; font-size: 1.2rem; color: #111; font-weight: 800;">"🧠 AI Memo Vault"</h1>
                         
                         <Show when=move || store.app_status.get() == AppStatus::Ready>
@@ -128,8 +157,8 @@ pub fn App() -> impl IntoView {
                         <div style="font-size: 0.85rem; font-weight: bold; color: #007aff;">
                             {move || match store.app_status.get() {
                                 AppStatus::NotLoaded => "엔진 대기중".to_string(),
-                                AppStatus::Loading => "🚀 듀얼 AI 적재 중...".to_string(),
-                                AppStatus::Ready => "🟢 Dual-Engine 활성화".to_string(),
+                                AppStatus::Loading => "🚀 AI 엔진 적재 중...".to_string(),
+                                AppStatus::Ready => "🟢 AI 엔진 활성화".to_string(),
                                 AppStatus::Error(err) => format!("🔴 {}", err),
                             }}
                         </div>
@@ -149,8 +178,8 @@ pub fn App() -> impl IntoView {
                                 <input 
                                     node_ref=store.search_input_ref
                                     type="text"
-                                    class=move || if store.ai_search_results.get().is_some() { "search-bar ai-search-active" } else { "search-bar" }
-                                    placeholder="키워드 검색, 또는 내용 입력 후 [🧭 벡터 검색] 버튼 클릭"
+                                    class=move || if store.ai_search_results.get().is_some() { "search-bar ai-search-active notranslate" } else { "search-bar notranslate" }
+                                    placeholder="키워드 또는 문장으로 검색해 보세요. (예: 지난주에 메모한 넷플릭스 구독료가 얼마지?)"
                                     on:input=move |ev| {
                                         store.set_search_query.set(event_target_value(&ev));
                                         if store.ai_search_results.get().is_some() { store.set_ai_search_results.set(None); }
@@ -168,7 +197,7 @@ pub fn App() -> impl IntoView {
                                 disabled=move || store.is_ai_searching.get() || store.search_query.get().trim().is_empty()
                                 style="padding: 0 16px; background: #2ecc71; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 4px rgba(46, 204, 113, 0.3);"
                             >
-                                {move || if store.is_ai_searching.get() { "탐색 중... ⏳".to_string() } else { "🧭 벡터 검색".to_string() }}
+                                {move || if store.is_ai_searching.get() { "탐색 중... ⏳".to_string() } else { "🧭 자연어 검색".to_string() }}
                             </button>
                         </div>
                         <Show when=move || !store.ai_search_status.get().is_empty()>
@@ -201,15 +230,14 @@ pub fn App() -> impl IntoView {
                                             }
                                         }
                                     };
+                                    // 👉 사용하지 않는 window 변수 할당 제거 (Warning 해결)
                                     let on_delete = move |_| {
                                         let current_cat = cat_for_delete.clone();
-                                        if let Some(window) = web_sys::window() {
-                                            store.set_category_list.update(|list| list.retain(|c| c != &current_cat));
-                                            store.set_memo_list.update(|list| { for m in list.iter_mut() { if m.data.category == current_cat { m.data.category = "기타".to_string(); } } });
-                                        }
+                                        store.set_category_list.update(|list| list.retain(|c| c != &current_cat));
+                                        store.set_memo_list.update(|list| { for m in list.iter_mut() { if m.data.category == current_cat { m.data.category = "기타".to_string(); } } });
                                     };
                                     view! {
-                                        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f0f0f0; border-radius: 20px; font-size: 0.85rem; color: #333; font-weight: 500;">
+                                        <span class="notranslate" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f0f0f0; border-radius: 20px; font-size: 0.85rem; color: #333; font-weight: 500;">
                                             {cat_display}
                                             <div style="display: flex; gap: 4px; margin-left: 4px; border-left: 1px solid #ccc; padding-left: 6px;">
                                                 <button on:click=on_edit title="이름 변경" style="background: none; border: none; cursor: pointer; color: #666; padding: 0; font-size: 0.9rem;">"✏️"</button>
@@ -221,7 +249,7 @@ pub fn App() -> impl IntoView {
                             />
                         </div>
                         <div style="display: flex; gap: 8px;">
-                            <input node_ref=category_add_input_ref type="text" placeholder="새 카테고리 이름 입력" on:input=move |ev| store.set_new_category_name.set(event_target_value(&ev)) style="flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; outline: none; font-size: 0.95rem;" />
+                            <input class="notranslate" node_ref=category_add_input_ref type="text" placeholder="새 카테고리 이름 입력" on:input=move |ev| store.set_new_category_name.set(event_target_value(&ev)) style="flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; outline: none; font-size: 0.95rem;" />
                             <button class="btn-hover" on:click=move |_| { let new_cat = store.new_category_name.get().trim().to_string(); if !new_cat.is_empty() && !store.category_list.get().contains(&new_cat) { store.set_category_list.update(|list| { list.insert(list.len().saturating_sub(2), new_cat); }); store.set_new_category_name.set(String::new()); if let Some(input) = category_add_input_ref.get() { input.set_value(""); } } } style="padding: 10px 20px; background: #222; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">"추가"</button>
                         </div>
                     </div>
@@ -232,16 +260,30 @@ pub fn App() -> impl IntoView {
                         <div style="text-align: center; margin-bottom: 32px;">
                             <span style="font-size: 3rem; display: block; margin-bottom: 16px;">"🧭"</span>
                             <h2 style="margin: 0; color: #111; font-size: 1.8rem; font-weight: 800;">"AI Memo Vault"</h2>
-                            <p style="color: #666; font-size: 1rem; margin-top: 12px;">"듀얼 코어 AI를 탑재한 궁극의 로컬 시맨틱 메모장"</p>
+                            <p style="color: #666; font-size: 1rem; margin-top: 12px;">"내 기기에서 완벽하게 구동되는 로컬 온디바이스 AI 메모장"</p>
                         </div>
                         
                         <div style="text-align: center; margin-bottom: 32px;">
-                            <button class="btn-hover" style="padding: 16px 40px; font-size: 1.15rem; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" on:click=move |_| store.load_model()>
-                                "듀얼 AI 엔진 동시 적재하기"
-                            </button>
+                            {
+                                if is_mobile_device() {
+                                    leptos::either::Either::Left(view! {
+                                        <div style="background: #fff3cd; border: 1px solid #ffe69c; border-radius: 8px; padding: 20px; color: #664d03; display: inline-block; text-align: left; max-width: 90%; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                                            <h4 style="margin: 0 0 8px 0; font-weight: 800; font-size: 1.1rem;">"📱 모바일 환경 제한 안내"</h4>
+                                            <p style="margin: 0; line-height: 1.5; font-size: 0.95rem;">
+                                                "로컬 AI 모델의 크기가 방대하여 모바일 브라우저에서는 메모리 부족(OOM)으로 앱이 종료될 수 있습니다.<br/><br/>원활한 이용을 위해 가급적 <b>PC(데스크탑/노트북) 환경</b>에서 접속해 주세요."
+                                            </p>
+                                        </div>
+                                    })
+                                } else {
+                                    leptos::either::Either::Right(view! {
+                                        <button class="btn-hover" style="padding: 16px 40px; font-size: 1.15rem; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" on:click=move |_| store.load_model()>
+                                            "AI 엔진 적재하기"
+                                        </button>
+                                    })
+                                }
+                            }
                         </div>
 
-                        // 🚀 여기에 기기 연동 불가(오직 이 PC에서만) 안내 문구를 확실하게 추가했습니다!
                         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 20px; text-align: left; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(34, 197, 94, 0.05);">
                             <h4 style="margin: 0 0 8px 0; font-weight: 800; color: #15803d; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;">
                                 "🛡️ 100% 로컬 구동 (서버 전송 무)"
@@ -281,7 +323,7 @@ pub fn App() -> impl IntoView {
 
                 <Show when=move || store.app_status.get() == AppStatus::Loading>
                     <div style="margin: auto; width: 100%; max-width: 400px; text-align: center; animation: fadeIn 0.5s;">
-                        <h3 style="color: #333; margin-bottom: 16px;">"Llama-1B (분류) + MiniLM (검색) 병렬 적재 중..."</h3>
+                        <h3 style="color: #333; margin-bottom: 16px;">"AI 엔진 적재 중..."</h3>
                         <div style="width: 100%; background: #e1e4e8; border-radius: 8px; height: 10px; overflow: hidden; margin-bottom: 12px;">
                             <div style=move || format!("width: {:.1}%; height: 100%; background: #007aff; transition: width 0.3s ease;", store.worker_progress.get() * 100.0)></div>
                         </div>
@@ -291,7 +333,7 @@ pub fn App() -> impl IntoView {
 
                 <Show when=move || store.app_status.get() == AppStatus::Ready>
                     <div style="background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #eaeaea;">
-                        <textarea node_ref=store.memo_input_ref class="memo-input" style="width: 100%; min-height: 100px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; resize: none; overflow: hidden; font-size: 1rem; outline: none; font-family: inherit; box-sizing: border-box;" placeholder="아무 생각이나 코드, 일상, 에러 로그를 던져주세요. 1B 엔진이 분류합니다." on:input=move |ev| { let target = ev.target().unwrap().dyn_into::<web_sys::HtmlTextAreaElement>().unwrap(); let style = web_sys::HtmlElement::style(&target); let _ = style.set_property("height", "auto"); let _ = style.set_property("height", &format!("{}px", target.scroll_height())); store.set_input_text.set(target.value()); } disabled=move || store.is_generating.get()></textarea>
+                        <textarea node_ref=store.memo_input_ref class="memo-input notranslate" style="width: 100%; min-height: 100px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; resize: none; overflow: hidden; font-size: 1rem; outline: none; font-family: inherit; box-sizing: border-box;" placeholder="아무 생각이나 코드, 일상, 에러 로그를 던져주세요. AI가 알아서 분류합니다." on:input=move |ev| { let target = ev.target().unwrap().dyn_into::<web_sys::HtmlTextAreaElement>().unwrap(); let style = web_sys::HtmlElement::style(&target); let _ = style.set_property("height", "auto"); let _ = style.set_property("height", &format!("{}px", target.scroll_height())); store.set_input_text.set(target.value()); } disabled=move || store.is_generating.get()></textarea>
                         <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
                             <button class="btn-hover" style="padding: 10px 24px; background: #007aff; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;" disabled=move || store.is_generating.get() || store.input_text.get().trim().is_empty() on:click=move |_| store.analyze_memo()> {move || if store.is_generating.get() { "정밀 분류 및 데이터 추출 중... ⏳".to_string() } else { "분류해서 적재하기 📥".to_string() }}</button>
                         </div>
@@ -325,7 +367,7 @@ pub fn App() -> impl IntoView {
                                 view! {
                                     <div style="display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.4s ease-out;">
                                         <div style="display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #eee; padding-bottom: 8px;">
-                                            <h2 style="margin: 0; font-size: 1.3rem; color: #222;">{cat_name.clone()}</h2>
+                                            <h2 class="notranslate" style="margin: 0; font-size: 1.3rem; color: #222;">{cat_name.clone()}</h2>
                                             <span style="background: #f0f0f0; color: #666; font-size: 0.8rem; padding: 2px 8px; border-radius: 12px; font-weight: 700;">{items.len()}</span>
                                             
                                             <Show when=move || { total_amount > 0 }>
@@ -353,15 +395,16 @@ pub fn App() -> impl IntoView {
                                                                                     <button class="magic-wand" title="삭제" on:click=move |_| store.delete_memo(memo_id) style="background: #fff0f0; border: 1px solid #ffcdd2; border-radius: 4px; cursor: pointer; padding: 2px 6px; font-size: 0.8rem; color: #d32f2f;">"🗑️"</button>
                                                                                 </div>
                                                                             </div>
-                                                                            <Show when=move || store.search_query.get().trim().is_empty() fallback=move || { view! { <div style="font-size: 0.95rem; color: #444; line-height: 1.6; white-space: pre-wrap;"><HighlightText text=memo_store.with_value(|m| m.data.content.clone()) query=store.search_query /></div> } }>
-                                                                                { move || { let mut options = Options::empty(); options.insert(Options::ENABLE_TABLES); options.insert(Options::ENABLE_STRIKETHROUGH); let content = memo_store.with_value(|m| m.data.content.clone()); let parser = Parser::new_ext(&content, options); let mut parsed_md_html = String::new(); html::push_html(&mut parsed_md_html, parser); view! { <div class="markdown-body" inner_html=parsed_md_html></div> } }}
+                                                                            
+                                                                            <Show when=move || store.search_query.get().trim().is_empty() fallback=move || { view! { <div class="notranslate" style="font-size: 0.95rem; color: #444; line-height: 1.6; white-space: pre-wrap;"><HighlightText text=memo_store.with_value(|m| m.data.content.clone()) query=store.search_query /></div> } }>
+                                                                                { move || { let mut options = Options::empty(); options.insert(Options::ENABLE_TABLES); options.insert(Options::ENABLE_STRIKETHROUGH); let content = memo_store.with_value(|m| m.data.content.clone()); let parser = Parser::new_ext(&content, options); let mut parsed_md_html = String::new(); html::push_html(&mut parsed_md_html, parser); view! { <div class="markdown-body notranslate" inner_html=parsed_md_html></div> } }}
                                                                             </Show>
                                                                         </div>
                                                                     }
                                                                 }
                                                             >
                                                                 <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; animation: fadeIn 0.2s;">
-                                                                    <textarea prop:value=move || edit_content.get() on:input=move |ev| set_edit_content.set(event_target_value(&ev)) style="width: 100%; min-height: 150px; padding: 12px; border: 1px solid #007aff; border-radius: 6px; resize: vertical; font-size: 0.95rem; outline: none; font-family: inherit;"></textarea>
+                                                                    <textarea class="notranslate" prop:value=move || edit_content.get() on:input=move |ev| set_edit_content.set(event_target_value(&ev)) style="width: 100%; min-height: 150px; padding: 12px; border: 1px solid #007aff; border-radius: 6px; resize: vertical; font-size: 0.95rem; outline: none; font-family: inherit;"></textarea>
                                                                     <div style="display: flex; justify-content: flex-end; gap: 8px;">
                                                                         <button class="btn-hover" on:click=move |_| set_is_editing.set(false) style="padding: 8px 16px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 6px; cursor: pointer;">"취소"</button>
                                                                         <button class="btn-hover" on:click=move |_| { store.set_memo_list.update(|list| { if let Some(m) = list.iter_mut().find(|x| x.id == memo_id) { m.data.content = edit_content.get(); } }); set_is_editing.set(false); } style="padding: 8px 16px; background: #007aff; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">"💾 저장"</button>
